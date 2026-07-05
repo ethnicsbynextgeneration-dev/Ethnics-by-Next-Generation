@@ -39,21 +39,41 @@ const OCCASIONS = [
   { label: "Pre Wedding Photoshoots", img: "https://res.cloudinary.com/dkkbpfmb5/image/upload/v1783145291/screen_vyn6zp.png" },
 ];
 
+// Cards visible at once, keyed by breakpoint — narrower screens show fewer,
+// wider cards (with a peek of the next one) instead of squeezing all 4 in.
+const OCCASION_BREAKPOINTS = [
+  { minWidth: 1024, visible: 4, cardW: 23, gap: 1 },
+  { minWidth: 640,  visible: 2, cardW: 47, gap: 2 },
+  { minWidth: 0,    visible: 1, cardW: 86, gap: 3 },
+];
+
+function useOccasionSliderConfig() {
+  const [config, setConfig] = useState(OCCASION_BREAKPOINTS[0]);
+  useEffect(() => {
+    const compute = () => {
+      const w = window.innerWidth;
+      setConfig(OCCASION_BREAKPOINTS.find((bp) => w >= bp.minWidth));
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, []);
+  return config;
+}
+
 // ─────────────────────────────────────────────
 // OCCASION SLIDER — rectangular cards, prev/next arrows
 // ─────────────────────────────────────────────
 function OccasionSlider() {
-  const VISIBLE = 4; // cards visible at once on desktop
+  const { visible: VISIBLE, cardW: CARD_W, gap: GAP } = useOccasionSliderConfig();
   const [current, setCurrent] = useState(0);
   const total = OCCASIONS.length;
-  const maxIndex = total - VISIBLE;
+  const maxIndex = Math.max(total - VISIBLE, 0);
+
+  useEffect(() => { setCurrent((c) => Math.min(c, maxIndex)); }, [maxIndex]);
 
   const prev = () => setCurrent((c) => Math.max(c - 1, 0));
   const next = () => setCurrent((c) => Math.min(c + 1, maxIndex));
-
-  // card width % — 4 visible with gap
-  const CARD_W = 23; // percent
-  const GAP = 1;     // percent between cards
 
   return (
     <div className="relative w-full px-6 md:px-16 max-w-[1400px] mx-auto">
@@ -184,9 +204,8 @@ function TestimonialSlider() {
       {/* Full-width single card */}
       <div
         key={active}
-        className="relative flex items-stretch overflow-hidden border border-[#BA9460]/20 w-full"
+        className="relative flex flex-col md:flex-row items-stretch overflow-hidden border border-[#BA9460]/20 w-full md:min-h-[480px]"
         style={{
-          minHeight: "480px",
           background: "#2a2d1e",
           animation: "testimonialFade 0.5s ease",
         }}
@@ -205,10 +224,9 @@ function TestimonialSlider() {
         <div className="absolute bottom-4 left-4 w-12 h-12 border-b border-l border-[#BA9460]/25 pointer-events-none" />
         <div className="absolute bottom-4 right-4 w-12 h-12 border-b border-r border-[#BA9460]/25 pointer-events-none" />
 
-        {/* ── ARCH PHOTO — left ~35%, with padding so arch floats inside card ── */}
+        {/* ── ARCH PHOTO — full width row on mobile, ~35% column on desktop ── */}
         <div
-          className="relative flex-shrink-0 self-stretch flex items-end justify-center"
-          style={{ width: "35%", padding: "24px 0 0 32px" }}
+          className="relative flex-shrink-0 self-stretch flex items-end justify-center w-full md:w-[35%] h-64 sm:h-80 md:h-auto pt-6 px-8 md:pl-8 md:pr-0"
         >
           {/* Arch container with padding inside card */}
           <div
@@ -234,13 +252,13 @@ function TestimonialSlider() {
         </div>
 
         {/* ── QUOTE — right side ── */}
-        <div className="flex flex-col justify-center px-12 md:px-16 py-16 flex-1 relative z-10">
+        <div className="flex flex-col justify-center px-8 sm:px-12 md:px-16 py-10 md:py-16 flex-1 relative z-10">
           {/* Large decorative quote mark */}
           <span
             className="text-[#BA9460] block mb-4"
             style={{
               fontFamily: "EB Garamond, serif",
-              fontSize: "100px",
+              fontSize: "clamp(56px, 10vw, 100px)",
               lineHeight: "0.6",
               opacity: 0.35,
             }}

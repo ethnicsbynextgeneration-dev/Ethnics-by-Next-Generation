@@ -21,6 +21,11 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
+
   // All pages have a full-height hero banner, so navbar is always transparent at top
   const hasHero = true;
 
@@ -88,31 +93,94 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile full-screen menu */}
-      {menuOpen && (
-        <div className="fixed inset-0 z-[60] bg-[#303326] flex flex-col items-center justify-center gap-10">
+      {/* Backdrop */}
+      <div
+        className={`fixed inset-0 z-[60] bg-[#1a1c12]/60 backdrop-blur-sm transition-opacity duration-500 md:hidden ${
+          menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setMenuOpen(false)}
+        aria-hidden="true"
+      />
+
+      {/* Mobile drawer — slides in from the right */}
+      <div
+        className={`fixed top-0 right-0 z-[70] h-full w-[80%] max-w-[360px] bg-[#f8ecd7] shadow-[-25px_0_60px_rgba(0,0,0,0.35)] flex flex-col transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] md:hidden ${
+          menuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        {/* Drawer header */}
+        <div className="flex items-center justify-between px-8 pt-8 pb-6">
+          <Link href="/" onClick={() => setMenuOpen(false)} className="flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://res.cloudinary.com/dkkbpfmb5/image/upload/v1782417491/logo_z1i7tl.png"
+              alt="Ethnics by Next Generation"
+              className="h-10 w-auto object-contain"
+              onError={(e) => (e.currentTarget.style.display = "none")}
+            />
+            <div className="flex flex-col leading-none">
+              <span
+                className="text-[16px] uppercase tracking-[0.15em] font-semibold text-[#303326]"
+                style={{ fontFamily: "EB Garamond, serif" }}
+              >
+                Ethnics
+              </span>
+              <span className="text-[8px] tracking-[0.3em] uppercase text-[#BA9460]">
+                By Next Generation
+              </span>
+            </div>
+          </Link>
           <button
-            className="absolute top-6 right-6 text-[#fcf9ed]"
+            className="text-[#303326] hover:text-[#BA9460] transition-colors"
             onClick={() => setMenuOpen(false)}
             aria-label="Close menu"
           >
-            <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          {navLinks.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setMenuOpen(false)}
-              className="text-[#fcf9ed] text-[18px] uppercase tracking-[0.25em] hover:text-[#BA9460] transition-colors"
-              style={{ fontFamily: "Libre Caslon Text, serif" }}
-            >
-              {label}
-            </Link>
-          ))}
         </div>
-      )}
+
+        <div className="h-px mx-8 bg-gradient-to-r from-[#BA9460]/60 to-transparent" />
+
+        {/* Nav links */}
+        <nav className="flex flex-col px-8 pt-6">
+          {navLinks.map(({ href, label }, i) => {
+            const active = pathname === href;
+            return (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setMenuOpen(false)}
+                className="group flex items-baseline gap-4 py-4 border-b border-[#303326]/10"
+              >
+                <span
+                  className="text-[11px] text-[#BA9460]/50"
+                  style={{ fontFamily: "EB Garamond, serif" }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span
+                  className={`text-[27px] lowercase tracking-normal leading-none transition-all duration-300 ${
+                    active ? "italic text-[#BA9460]" : "text-[#303326] group-hover:text-[#BA9460] group-hover:italic"
+                  }`}
+                  style={{ fontFamily: "EB Garamond, serif" }}
+                >
+                  {label}
+                </span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Drawer footer */}
+        <div className="mt-auto px-8 pb-10">
+          <div className="h-px bg-gradient-to-r from-[#BA9460]/40 to-transparent mb-6" />
+          <p className="text-[#303326]/60 text-[11px] uppercase tracking-widest">
+            Kumbakonam, Tamil Nadu
+          </p>
+        </div>
+      </div>
     </>
   );
 }

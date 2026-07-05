@@ -1,7 +1,17 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(npm run *)"
+      "PowerShell(npm run *)",
+      "Bash(npm run *)",
+      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 3000 -State Listen | Select-Object -ExpandProperty OwningProcess\")",
+      "Bash(netstat -ano)",
+      "Bash(PORT=3002 npm run dev)",
+      "Bash(curl *)",
+      "Bash(PORT=3003 npm run start)",
+      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 3003 -State Listen | Select-Object -ExpandProperty OwningProcess\" 2>/dev/null)",
+      "Bash(taskkill *)",
+      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 3002,3003 -State Listen -ErrorAction SilentlyContinue | Select-Object LocalPort, OwningProcess\")",
+      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 3003 -State Listen -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess\")"
     ]
   }
 }
