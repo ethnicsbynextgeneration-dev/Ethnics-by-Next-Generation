@@ -39,12 +39,41 @@ const OCCASIONS = [
   { label: "Pre Wedding Photoshoots", img: "https://res.cloudinary.com/dkkbpfmb5/image/upload/v1783145291/screen_vyn6zp.png" },
 ];
 
-// Cards visible at once, keyed by breakpoint — narrower screens show fewer,
-// wider cards (with a peek of the next one) instead of squeezing all 4 in.
+// Shared occasion card — used by both the mobile grid and the sm+ carousel
+function OccasionCard({ item }) {
+  return (
+    <div className="group relative overflow-hidden cursor-pointer">
+      <div className="relative aspect-[3/4] overflow-hidden bg-[#303326]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={item.img}
+          alt={item.label}
+          className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.4s]"
+          loading="lazy"
+        />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+        {/* Gold border on hover */}
+        <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#BA9460]/70 transition-all duration-500 m-2 pointer-events-none" />
+        {/* Label */}
+        <div className="absolute bottom-0 left-0 w-full px-3 py-5 md:px-4 md:py-6 text-center">
+          <h3
+            className="text-white text-[12px] md:text-[15px] uppercase tracking-[0.2em] md:tracking-[0.25em] leading-snug"
+            style={{ fontFamily: "Libre Caslon Text, serif" }}
+          >
+            {item.label}
+          </h3>
+          <div className="w-6 h-px bg-[#BA9460] mx-auto mt-3 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Cards visible at once for the sm+ carousel, keyed by breakpoint.
 const OCCASION_BREAKPOINTS = [
   { minWidth: 1024, visible: 4, cardW: 23, gap: 1 },
-  { minWidth: 640,  visible: 2, cardW: 47, gap: 2 },
-  { minWidth: 0,    visible: 1, cardW: 86, gap: 3 },
+  { minWidth: 0,    visible: 2, cardW: 47, gap: 2 },
 ];
 
 function useOccasionSliderConfig() {
@@ -62,9 +91,9 @@ function useOccasionSliderConfig() {
 }
 
 // ─────────────────────────────────────────────
-// OCCASION SLIDER — rectangular cards, prev/next arrows
+// OCCASION CAROUSEL — rectangular cards, prev/next arrows (tablet & desktop)
 // ─────────────────────────────────────────────
-function OccasionSlider() {
+function OccasionCarousel() {
   const { visible: VISIBLE, cardW: CARD_W, gap: GAP } = useOccasionSliderConfig();
   const [current, setCurrent] = useState(0);
   const total = OCCASIONS.length;
@@ -99,35 +128,8 @@ function OccasionSlider() {
           }}
         >
           {OCCASIONS.map((item, i) => (
-            <div
-              key={i}
-              className="group relative flex-none overflow-hidden cursor-pointer"
-              style={{ width: `${CARD_W}%` }}
-            >
-              {/* Card — tall rectangle */}
-              <div className="relative aspect-[3/4] overflow-hidden bg-[#303326]">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={item.img}
-                  alt={item.label}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1.4s]"
-                  loading="lazy"
-                />
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-                {/* Gold border on hover */}
-                <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#BA9460]/70 transition-all duration-500 m-2 pointer-events-none" />
-                {/* Label */}
-                <div className="absolute bottom-0 left-0 w-full px-4 py-6 text-center">
-                  <h3
-                    className="text-white text-[13px] md:text-[15px] uppercase tracking-[0.25em] leading-snug"
-                    style={{ fontFamily: "Libre Caslon Text, serif" }}
-                  >
-                    {item.label}
-                  </h3>
-                  <div className="w-6 h-px bg-[#BA9460] mx-auto mt-3 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
-                </div>
-              </div>
+            <div key={i} className="flex-none" style={{ width: `${CARD_W}%` }}>
+              <OccasionCard item={item} />
             </div>
           ))}
         </div>
@@ -157,6 +159,26 @@ function OccasionSlider() {
         ))}
       </div>
     </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// SHOP THE OCCASION — static 2-col grid on mobile, carousel from sm up
+// ─────────────────────────────────────────────
+function OccasionSlider() {
+  return (
+    <>
+      <div className="sm:hidden px-6">
+        <div className="grid grid-cols-2 gap-3 max-w-[520px] mx-auto">
+          {OCCASIONS.map((item) => (
+            <OccasionCard key={item.label} item={item} />
+          ))}
+        </div>
+      </div>
+      <div className="hidden sm:block">
+        <OccasionCarousel />
+      </div>
+    </>
   );
 }
 

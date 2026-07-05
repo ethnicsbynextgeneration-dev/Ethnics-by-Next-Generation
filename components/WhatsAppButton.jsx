@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "917871910369"; // +91 96770 31312
+const WHATSAPP_NUMBER = "919677031312"; // +91 96770 31312
 
 export default function WhatsAppButton() {
   return (
