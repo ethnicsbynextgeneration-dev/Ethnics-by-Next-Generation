@@ -1,0 +1,147 @@
+@import "tailwindcss";
+
+/* ── Brand Tokens ── */
+@theme inline {
+  --color-surface:           #f8ecd7;
+  --color-background:        #f8ecd7;
+  --color-primary:           #303326;
+  --color-secondary:         #BA9460;
+  --color-cream:             #f8ecd7;
+  --color-ivory:             #f8ecd7;
+  --color-charcoal:          #47493B;
+  --color-forest:            #4A5C3A;
+  --color-outline-variant:   #c8c7bd;
+  --color-on-surface-variant:#474740;
+  --color-surface-container: #f1eee2;
+
+  --font-display: "EB Garamond", serif;
+  --font-serif:   "Libre Caslon Text", serif;
+  --font-sans:    "DM Sans", sans-serif;
+  --font-cinzel:  "Cinzel", serif;
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  background-color: #f8ecd7;
+  color: #303326;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* ── Typography helpers ── */
+.heading-serif {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+/* ── Ornament corners ── */
+.ornament { position: absolute; width: 40px; height: 40px; }
+.ornament-tl { top: -8px; left: -8px; border-top: 1px solid #BA9460; border-left: 1px solid #BA9460; }
+.ornament-br { bottom: -8px; right: -8px; border-bottom: 1px solid #BA9460; border-right: 1px solid #BA9460; }
+
+/* ── Scroll reveal ── */
+.reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.9s ease, transform 0.9s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── Arch frame ── */
+.arch-frame { border-radius: 1000px 1000px 0 0; }
+
+/* ── Gold divider ── */
+.gold-line { width: 48px; height: 1px; background: #BA9460; }
+
+/* ── Reel carousel ── */
+.reel-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 20px 40px;
+}
+.reel-track::-webkit-scrollbar { display: none; }
+.reel-item {
+  flex: none;
+  scroll-snap-align: center;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.reel-item:hover { transform: scale(1.03); box-shadow: 0 20px 60px rgba(48,51,38,0.3); }
+
+/* ── Testimonial slider ── */
+.testimonial-slide {
+  position: absolute; inset: 0;
+  opacity: 0; visibility: hidden;
+  transition: opacity 1s ease, visibility 1s;
+  display: flex;
+}
+.testimonial-slide.active { opacity: 1; visibility: visible; z-index: 10; }
+
+/* ── Category card hover ── */
+.category-card:hover .category-img { transform: scale(1.07); }
+.category-img { transition: transform 1.2s cubic-bezier(0.4,0,0.2,1); }
+
+/* ── Story media hover ── */
+.story-card:hover .story-media-inner { transform: scale(1.04); }
+.story-media-inner { transition: transform 1.4s cubic-bezier(0.4,0,0.2,1); }
+
+/* ── Form fields ── */
+.form-field {
+  border-bottom: 1px solid rgba(48,51,38,0.15);
+  transition: border-color 0.3s ease;
+  background: transparent;
+  width: 100%;
+  padding: 8px 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+}
+.form-field:focus { outline: none; border-color: #BA9460; }
+.form-field::placeholder { color: rgba(48,51,38,0.3); }
+.form-group:focus-within label { color: #BA9460; }
+
+/* ── Nav scroll states ── */
+nav.scrolled { background-color: #303326 !important; }
+nav.scrolled .nav-link { color: #fcf9ed !important; }
+nav.scrolled .nav-logo-text { color: #fcf9ed !important; }
+nav.scrolled .nav-logo-sub { color: #BA9460 !important; }
+
+/* ── Map grid ── */
+.map-grid {
+  background-image: radial-gradient(#BA9460 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.12;
+}
+
+/* ── Pin bounce ── */
+@keyframes bounce-pin { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.pin-bounce { animation: bounce-pin 2s ease-in-out infinite; }
+
+/* ── Hero video ── */
+.hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* ── Hero fade-up animation ── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  opacity: 0;
+  animation: fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ── Hero video / iframe ── */
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  border: none;
+}
