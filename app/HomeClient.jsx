@@ -579,7 +579,7 @@ export default function HomeClient() {
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://res.cloudinary.com/dkkbpfmb5/image/upload/v1782928981/ChatGPT_Image_Jul_1_2026_11_32_21_PM_zg8n9y.png"
+          src="https://res.cloudinary.com/dkkbpfmb5/image/upload/v1783323996/webp_hero_qkl14p.webp"
           alt="Ethnics by Next Generation Hero"
           className="absolute inset-0 w-full h-full object-cover"
           style={{ animation: "heroZoom 14s ease-in-out infinite alternate" }}
