@@ -14,7 +14,7 @@ export default function AboutPage() {
         <section className="relative h-screen flex items-center justify-center overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="https://res.cloudinary.com/dkkbpfmb5/image/upload/v1782417250/screen_qdmwsw.png"
+            src="https://res.cloudinary.com/dkkbpfmb5/image/upload/v1783852393/ABOUT_ORG_scsj6w.webp"
             alt="About Banner"
             className="absolute inset-0 w-full h-full object-cover scale-105"
             style={{ animation: "heroZoom 12s ease-in-out infinite alternate" }}

@@ -196,7 +196,7 @@ export default function CollectionsPage() {
         <section className="relative h-screen flex items-center justify-center overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="https://res.cloudinary.com/dkkbpfmb5/image/upload/v1782418556/screen_rldari.png"
+            src="https://res.cloudinary.com/dkkbpfmb5/image/upload/v1783852393/About_xnwiwn.webp"
             alt="Collections Banner"
             className="absolute inset-0 w-full h-full object-cover"
             style={{ animation: "heroZoom 14s ease-in-out infinite alternate" }}
